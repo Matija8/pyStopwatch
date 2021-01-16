@@ -1,0 +1,2 @@
+# pyTimer
+Simple python timer.
