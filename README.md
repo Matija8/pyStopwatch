@@ -1,3 +1,3 @@
 # pyTimer
 
-Simple python timer.
+Simple python timer with cli and tkinter gui version.
