@@ -41,7 +41,8 @@ class TestFormatTimeCase(unittest.TestCase):
 
     def test_whole_times_vs_datetime_timedelta(self):
         from datetime import timedelta
-        for time_in_seconds in range(0, 50000, 54):
+        seconds_in_day = 86400
+        for time_in_seconds in range(0, seconds_in_day, 54):
             timedelta_time = str(timedelta(seconds=time_in_seconds))
             if len(timedelta_time) < 8:
                 timedelta_time = '0' + timedelta_time

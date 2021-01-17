@@ -1,4 +1,4 @@
-from src.timer import Timer
+import sys
 from src.timer_subject import TimerSubject
 from src.timer_gui import TimerGui
 from src.timer_gui_observable_adapter import TimerGuiObserverAdapter
@@ -29,10 +29,9 @@ def _cli_main():
         while True:
             timer.toggle_timer()
             if timer.running:
-                print('Timer started')
+                print('Stopwatch started')
             else:
-                print('Timer stopped')
-                print(f'{timer.get_elapsed_time():.2f} seconds have passed.')
+                print('Stopwatch stopped')
             input()
     except KeyboardInterrupt:
         print('\n')
@@ -41,7 +40,7 @@ def _cli_main():
 
 
 if __name__ == '__main__':
-    use_cli = False
+    use_cli = '-c' in sys.argv[1:]
     if use_cli:
         _cli_main()
     else:
