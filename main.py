@@ -1,21 +1,17 @@
 from src.timer import Timer
+from src.timer_subject import TimerSubject
 from src.timer_gui import TimerGui
+from src.timer_gui_observable_adapter import TimerGuiObserverAdapter
 
 
 def _gui_main():
-    timer, timer_gui = Timer(), TimerGui()
-    timer_gui.set_toggle_btn_command(_make_toggle_callback(timer, timer_gui))
-    timer_gui.set_time_update(lambda: timer.get_elapsed_time())
-    timer_gui.start_gui()
-
-
-def _make_toggle_callback(timer: Timer, timer_gui: TimerGui):
-    def callback():
-        timer.toggle_timer()
-        timer_gui.set_time(timer.get_elapsed_time())
-        print(f'Timer is running: {timer.running}')
-
-    return callback
+    timer, gui = TimerSubject(), TimerGui()
+    gui.set_toggle_btn_command(timer.toggle_timer)
+    observer = TimerGuiObserverAdapter(gui)
+    observer.sub(timer)
+    timer.set_time_update()
+    gui.start_gui()
+    timer.clear_time_update()
 
 
 def _cli_main():

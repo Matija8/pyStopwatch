@@ -1,8 +1,6 @@
 import tkinter as tk
 from datetime import timedelta
 from typing import Callable
-import time
-import threading
 
 
 class TimerGui:
@@ -12,11 +10,8 @@ class TimerGui:
 
     def __init__(self):
         self._root = TimerGui._make_root()
-        self._set_close_hook()
         self._toggleBtn = TimerGui._make_toggle_btn(self._root)
         self._timeLabel = TimerGui._make_time_label(self._root)
-        self._time_update_thread = None
-        self._should_join_signal = False
 
     def set_time(self, time_in_seconds: float) -> None:
         self._timeLabel['text'] = str(timedelta(seconds=int(time_in_seconds)))
@@ -27,34 +22,9 @@ class TimerGui:
     def start_gui(self):
         self._root.mainloop()
 
-    def set_time_update(self, time_getter: Callable[[], float]) -> None:
-        self.clear_time_update()
-
-        def time_update():
-            while True:
-                if self._should_join_signal:
-                    break
-                self.set_time(time_getter())
-                WAIT_SECONDS = 0.1
-                time.sleep(WAIT_SECONDS)
-
-        self._time_update_thread = threading.Thread(target=time_update)
-        self._time_update_thread.start()
-        print('Interval update thread started!')
-
-    def clear_time_update(self) -> None:
-        if self._time_update_thread:
-            _debug_threads()
-            self._should_join_signal = True
-            self._time_update_thread.join()
-            self._time_update_thread = None
-            print('Join success!')
-            self._should_join_signal = False
-            _debug_threads()
-
-    def _set_close_hook(self):
+    def set_on_destroy_hook(self, callback: Callable[[], None]):
         def on_destroy():
-            self.clear_time_update()
+            callback()
             self._root.destroy()
 
         self._root.protocol('WM_DELETE_WINDOW', on_destroy)
@@ -86,9 +56,3 @@ class TimerGui:
         time_label.pack(pady=5)
         time_label['text'] = str(timedelta(seconds=0))
         return time_label
-
-
-def _debug_threads():
-    print('Active threads:')
-    for thread in threading.enumerate():
-        print('\t' + thread.name)
