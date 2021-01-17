@@ -1,41 +1,43 @@
 import sys
-from src.timer_subject import TimerSubject
-from src.timer_gui import TimerGui
-from src.timer_gui_observable_adapter import TimerGuiObserverAdapter
-from src.cli_observer import CliTimerObserver
+
+from src.cli_sw_observer import CliSwObserver
+from src.logging_stopwatch import LoggingSW
+from src.sw_gui import StopwatchGui
+from src.sw_gui_observable_adapter import SwGuiToObserverAdapter
+from src.sw_subject import StopwatchSubject
 
 
 def _gui_main():
-    timer, gui = TimerSubject(), TimerGui()
-    gui.set_toggle_btn_command(timer.toggle_timer)
-    gui.set_reset_btn_command(timer.reset_timer)
-    observer = TimerGuiObserverAdapter(gui)
-    observer.sub(timer)
-    timer.set_time_update()
+    sw_subject, gui = StopwatchSubject(LoggingSW()), StopwatchGui()
+    gui.set_toggle_btn_command(sw_subject.sw.toggle_timer)
+    gui.set_reset_btn_command(sw_subject.sw.reset_timer)
+    observer = SwGuiToObserverAdapter(gui)
+    observer.sub(sw_subject)
+    sw_subject.set_time_update()
     gui.start_gui()
-    timer.clear_time_update()
+    sw_subject.clear_time_update()
 
 
 def _cli_main():
-    timer = TimerSubject()
+    sw_subject = StopwatchSubject(LoggingSW())
     try:
-        cli = CliTimerObserver()
+        cli = CliSwObserver()
         print(
             'Commands:\n Press enter to toggle timer on/off.\n Press Ctrl+c to exit.'
         )
-        timer.set_time_update()
+        sw_subject.set_time_update()
         input()
-        cli.sub(timer)
+        cli.sub(sw_subject)
         while True:
-            timer.toggle_timer()
-            if timer.running:
+            sw_subject.sw.toggle_timer()
+            if sw_subject.sw.running:
                 print('Stopwatch started')
             else:
                 print('Stopwatch stopped')
             input()
     except KeyboardInterrupt:
         print('\n')
-        timer.clear_time_update()
+        sw_subject.clear_time_update()
         print('Bye!')
 
 

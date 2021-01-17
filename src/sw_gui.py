@@ -1,21 +1,22 @@
 import tkinter as tk
 from typing import Callable
+
 from .time_format import TimeFormatter as tf
 
 
-class TimerGui:
+class StopwatchGui:
 
     TimeLabelFont = ('Verdana', 20)
     ToggleBtnFont = ('Verdana', 10)
 
     def __init__(self):
-        self._root = TimerGui._make_root()
-        self._toggleBtn = TimerGui._make_toggle_btn(self._root)
-        self._resetBtn = TimerGui._make_reset_btn(self._root)
-        self._timeLabel = TimerGui._make_time_label(self._root)
+        self._root = StopwatchGui._make_root()
+        self._toggleBtn = StopwatchGui._make_toggle_btn(self._root)
+        self._resetBtn = StopwatchGui._make_reset_btn(self._root)
+        self._timeLabel = StopwatchGui._make_time_label(self._root)
 
     def set_time(self, time_in_seconds: float) -> None:
-        self._timeLabel['text'] = TimerGui._format_time(time_in_seconds)
+        self._timeLabel['text'] = StopwatchGui._format_time(time_in_seconds)
 
     def set_toggle_btn_command(self, callback: Callable[[], None]) -> None:
         self._toggleBtn.configure(command=callback)
@@ -47,7 +48,7 @@ class TimerGui:
         btn = tk.Button(
             root,
             text='Toggle on/off',
-            font=TimerGui.ToggleBtnFont,
+            font=StopwatchGui.ToggleBtnFont,
             command=lambda: print('No command set!')
         )
         btn.pack(pady=30, side=tk.TOP)
@@ -58,7 +59,7 @@ class TimerGui:
         btn = tk.Button(
             root,
             text='Reset',
-            font=TimerGui.ToggleBtnFont,
+            font=StopwatchGui.ToggleBtnFont,
             command=lambda: print('No command set!')
         )
         btn.pack(pady=20, side=tk.TOP)
@@ -67,10 +68,14 @@ class TimerGui:
     @staticmethod
     def _make_time_label(root: tk.Tk) -> tk.Label:
         time_label = tk.Label(
-            root, text='', bg='black', fg='white', font=TimerGui.TimeLabelFont
+            root,
+            text='',
+            bg='black',
+            fg='white',
+            font=StopwatchGui.TimeLabelFont
         )
         time_label.pack(pady=5)
-        time_label['text'] = TimerGui._format_time(0)
+        time_label['text'] = StopwatchGui._format_time(0)
         return time_label
 
     @staticmethod
