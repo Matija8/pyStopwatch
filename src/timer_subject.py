@@ -16,7 +16,7 @@ class TimerSubject(Timer):
         self._should_join_signal = False
 
     def sub(self, observer):
-        print('Sub')
+        # print('Sub added to TimerSubject')
         self._observers.append(observer)
         return self
 
@@ -55,5 +55,5 @@ class TimerSubject(Timer):
 
 def _debug_threads():
     print('Active threads:')
-    for thread in threading.enumerate():
-        print('\t' + thread.name)
+    for i, thread in enumerate(threading.enumerate()):
+        print(f'   {i}) {thread.name}')

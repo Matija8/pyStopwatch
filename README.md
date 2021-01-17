@@ -1,4 +1,4 @@
-# pyTimer
+# stopwatch
 
-Simple python timer with cli and tkinter gui version.
+Simple stopwatch with cli and tkinter gui version.
 Also an exercise in design patterns.

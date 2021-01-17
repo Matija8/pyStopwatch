@@ -24,7 +24,6 @@ class Timer:
         self._elapsed_time = 0  # type: float
 
     def toggle_timer(self):
-        print('Toggle')
         if self.running:
             self.stop_timer()
         else:

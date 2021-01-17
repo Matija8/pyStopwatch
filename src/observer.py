@@ -3,7 +3,6 @@ class Observer():
         self.subscription = None
 
     def sub(self, subject) -> None:
-        print('Sub1')
         self.subscription = subject.sub(self)
 
     def unsub(self) -> None:
