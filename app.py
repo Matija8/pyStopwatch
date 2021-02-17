@@ -1,4 +1,5 @@
 import sys
+from typing import List
 
 from src.cli_sw_observer import CliSwObserver
 from src.logging_stopwatch import LoggingSW
@@ -7,7 +8,15 @@ from src.sw_gui_observable_adapter import SwGuiToObserverAdapter
 from src.sw_subject import StopwatchSubject
 
 
-def _gui_main():
+def _main(args: List[str]) -> None:
+    use_cli = '-c' in sys.argv[1:]
+    if use_cli:
+        cli_main()
+    else:
+        gui_main()
+
+
+def gui_main() -> None:
     sw_subject, gui = StopwatchSubject(LoggingSW()), StopwatchGui()
     gui.set_toggle_btn_command(sw_subject.sw.toggle_timer)
     gui.set_reset_btn_command(sw_subject.sw.reset_timer)
@@ -18,7 +27,7 @@ def _gui_main():
     sw_subject.clear_time_update()
 
 
-def _cli_main():
+def cli_main() -> None:
     sw_subject = StopwatchSubject(LoggingSW())
     try:
         cli = CliSwObserver()
@@ -42,8 +51,4 @@ def _cli_main():
 
 
 if __name__ == '__main__':
-    use_cli = '-c' in sys.argv[1:]
-    if use_cli:
-        _cli_main()
-    else:
-        _gui_main()
+    _main(sys.argv)
