@@ -2,6 +2,7 @@
 /.mypy_cache
 /build
 /dist
+/bin
 /src/__pycache__
 /logs
-main.spec
+*.spec
